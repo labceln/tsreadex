@@ -89,8 +89,11 @@ void CTraceB24Caption::AddPacket(const uint8_t *packet)
             if (pes.size() >= 6 + pesPacketLength) {
                 // PES has been accumulated
                 pes.resize(6 + pesPacketLength);
-                OutputPrivateDataPes(pes, pid == m_captionPid ? m_captionDrcsList : m_superimposeDrcsList,
-                                     pid == m_captionPid ? m_captionLangTags : m_superimposeLangTags);
+                if (pid == m_captionPid) {
+                    OutputPrivateDataPes(pes, m_captionDrcsList, m_captionLangTags);
+                } else {
+                    OutputPrivateDataPes(pes, m_superimposeDrcsList, m_superimposeLangTags);
+                }
                 pes.clear();
             }
         }
